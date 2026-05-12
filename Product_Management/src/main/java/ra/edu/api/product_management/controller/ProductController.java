@@ -20,15 +20,22 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProducts(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(String.valueOf(productService.addProduct(productDTO)), HttpStatus.CREATED);
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
+        productService.addProduct(productDTO);
+        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
     }
-    @PutMapping
-    public ResponseEntity<String> updateProduct(@RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(String.valueOf(productService.updateProduct(productDTO)), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable String id, @RequestBody ProductDTO productDTO) {
+        productDTO.setId(id);
+        productService.updateProduct(productDTO);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@RequestBody String id) {
-        return new ResponseEntity<>(String.valueOf(productService.deleteProduct(id)), HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deleteProduct(@PathVariable String id) {
+        boolean deleted = productService.deleteProduct(id);
+        if (deleted) {
+            return new ResponseEntity<>("Xóa thành công sản phẩm ID: " + id, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Không tìm thấy sản phẩm ID: " + id, HttpStatus.NOT_FOUND);
     }
 }

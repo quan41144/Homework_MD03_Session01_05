@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
     private List<ProductDTO> list = new ArrayList<>();
-    public void ProductDTO() {
+    public ProductRepositoryImpl() {
         list.add(new ProductDTO("p01", "Laptop HP", "HP", 2021, LocalDate.parse("2021-12-21"), 15000000));
         list.add(new ProductDTO("p02", "Laptop HP", "HP", 2021, LocalDate.parse("2021-12-21"), 15000000));
         list.add(new ProductDTO("p03", "Laptop HP", "HP", 2021, LocalDate.parse("2021-12-21"), 15000000));
@@ -39,13 +39,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public boolean deleteProduct(String id) {
-        for (ProductDTO p : list) {
-            if (p.getId().equalsIgnoreCase(id)) {
-                System.out.println("Xóa thành công sản phẩm ID: " + id);
-                list.remove(p);
-                return true;
-            }
-        }
-        return false;
+        return list.removeIf(p -> p.getId().equalsIgnoreCase(id));
     }
 }
